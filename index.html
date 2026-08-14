@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bug Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+      button {
+        padding: 10px 16px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 12px;
+        border-radius: 8px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Customer Bug Demo</h2>
+    <p>Click the button to call the API without the email query parameter.</p>
+    <button id="callApi">Trigger failing request</button>
+    <pre id="result">Waiting...</pre>
+
+    <script>
+      const resultBox = document.getElementById('result');
+
+      async function callApi() {
+        resultBox.textContent = 'Sending request...';
+
+        try {
+          const response = await fetch('/api/search-users?page=1');
+          const data = await response.json();
+          resultBox.textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+          resultBox.textContent = 'Error: ' + error.message;
+        }
+      }
+
+      document.getElementById('callApi').addEventListener('click', callApi);
+    </script>
+  </body>
+</html>

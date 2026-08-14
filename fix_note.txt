@@ -1,0 +1,17 @@
+Bug: The app crashes when the `email` query is missing or not a string.
+
+Root cause:
+- Line 2 in buggy_api.js: `const email = req.query.email.toLowerCase();`
+- If `req.query.email` is undefined, `null`, or a non-string, `.toLowerCase()` throws a TypeError.
+
+Fix:
+- Change line 2 to:
+  `const email = String(req.query.email || '').toLowerCase();`
+
+Why this fixes it:
+- This safely converts a missing value to an empty string before calling `toLowerCase()`.
+- It avoids the crash and still allows the query to behave as an empty search when no email is provided.
+
+Optional extra validation:
+- Also guard `limit` so it is a positive integer:
+  `const limit = Math.max(1, Number(req.query.limit || 25));`
